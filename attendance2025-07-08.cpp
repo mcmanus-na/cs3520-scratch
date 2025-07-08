@@ -87,4 +87,3 @@ int main() {
     vector_length_equals(v1,v2); //YES!
     vector_length_equals(v1,v3); //NO!
 }
-
