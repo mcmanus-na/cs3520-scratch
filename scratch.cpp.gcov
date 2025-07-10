@@ -1,0 +1,240 @@
+        -:    0:Source:scratch.cpp
+        -:    0:Graph:./scratch.gcno
+        -:    0:Data:./scratch.gcda
+        -:    0:Runs:1
+        -:    1:#include <string>
+        -:    2:#include <vector>
+        -:    3:#include <iostream>
+        -:    4:#include <cassert>
+        -:    5:
+        -:    6:using namespace std;
+        -:    7:
+        -:    8:/*
+        -:    9:Exercise 1:
+        -:   10:
+        -:   11:Create an enum called "MealSize" with the possible options "None", "Small", "Medium", "Large"
+        -:   12:This enum should be scoped. Add a comment explaining why a scoped enum is a good idea.
+        -:   13:Create a struct called "Meal" with three member variables: burger_size, fries_size, drink_size. Each variable should have the type "MealSize"
+        -:   14:Create a class called "Restaurant" with two member variables: an int called "num_employees" and a vector of "Meal"s called "todays_orders"
+        -:   15:Create a default constructor and a constructor that takes an int and a vector as input. The default constructor should initialize the Restaurant object with reasonable defaults, while the other constructor should set the member variables based on what's passed in.
+        -:   16:Create a member function that prints the number of employees and the number of daily orders.
+        -:   17:Create one or more member functions that do something else. Get creative
+        -:   18:*/
+        -:   19:
+        -:   20:// scoped enum means if we had another enum with an overlapping option it wouldn't be confused
+        -:   21:enum class MealSize {
+        -:   22:    None,
+        -:   23:    Small,
+        -:   24:    Medium,
+        -:   25:    Large
+        -:   26:};
+        -:   27:
+        -:   28:struct Meal {
+        -:   29:    MealSize burger_size;
+        -:   30:    MealSize fries_size;
+        -:   31:    MealSize drink_size;
+        -:   32:};
+        -:   33:
+        -:   34:const Meal EMPTY_MEAL = {MealSize::None, MealSize::None, MealSize::None};
+        -:   35:
+        -:   36:class Restaurant {
+        -:   37:    int num_employees;
+        -:   38:    vector<Meal> todays_orders;
+        -:   39:
+    #####:   40:    string get_meal_desc(Meal meal) const {
+    #####:   41:        return "Burger:" + get_size_desc(meal.burger_size)
+    #####:   42:            + "\nFries:" + get_size_desc(meal.fries_size)
+    #####:   43:            + "\nDrink:" + get_size_desc(meal.drink_size);
+        -:   44:    }
+        -:   45:
+    #####:   46:    string get_size_desc(MealSize size) const {
+    #####:   47:        switch (size) {
+    #####:   48:            case MealSize::None:
+    #####:   49:                return "None";
+    #####:   50:            case MealSize::Small:
+    #####:   51:                return "Small";
+    #####:   52:            case MealSize::Medium:
+    #####:   53:                return "Medium";
+    #####:   54:            case MealSize::Large:
+    #####:   55:                return "Large";
+        -:   56:        }
+    #####:   57:        return "Error";
+        -:   58:    }
+        -:   59:
+        -:   60:public:
+    #####:   61:    void print() const {
+    #####:   62:        cout << "This restaurant has " << num_employees << " employees:" << endl;
+    #####:   63:        cout << "Todays orders:" << endl;
+    #####:   64:        for (Meal meal : todays_orders) {
+    #####:   65:            cout << "Order:" << endl << get_meal_desc(meal) << endl;
+        -:   66:        }
+    #####:   67:    }
+        -:   68:
+    #####:   69:    Restaurant(): num_employees(1), todays_orders(vector<Meal>()) {
+    #####:   70:        cout << "Creating default Restaurant:" << endl;
+    #####:   71:        print();
+    #####:   72:    }
+        -:   73:
+    #####:   74:    Restaurant(int num_employees, vector<Meal> todays_orders)
+    #####:   75:        : num_employees(num_employees), todays_orders(todays_orders) {
+    #####:   76:        cout << "Creating new Restaurant:" << endl;
+    #####:   77:        print();
+    #####:   78:    }
+        -:   79:
+    #####:   80:    void add_order(Meal new_order) {
+    #####:   81:        todays_orders.push_back(new_order);
+    #####:   82:    }
+        -:   83:
+    #####:   84:    Meal get_order() {
+    #####:   85:        if (todays_orders.size() == 0) {
+    #####:   86:            cout << "No orders!" << endl;
+    #####:   87:            return EMPTY_MEAL;
+        -:   88:        }
+    #####:   89:        Meal meal = todays_orders.at(0);
+    #####:   90:        todays_orders.erase(todays_orders.begin());
+    #####:   91:        return meal;
+        -:   92:    }
+        -:   93:};
+        -:   94:
+    #####:   95:void test_part1() {
+    #####:   96:    Restaurant r1;
+    #####:   97:    Meal m1 = {MealSize::Small, MealSize::Medium, MealSize::Small};
+    #####:   98:    Meal m2 = {MealSize::Large, MealSize::Small, MealSize::Large};
+    #####:   99:    Meal m3 = {MealSize::Medium, MealSize::Large, MealSize::Medium};
+    #####:  100:    Restaurant r2(10, {m1, m2, m3});
+        -:  101:
+    #####:  102:    r1.add_order(m1);
+    #####:  103:    r1.print();
+    #####:  104:    r2.get_order();
+    #####:  105:    r2.print();
+    #####:  106:}
+        -:  107:
+        -:  108:/*
+        -:  109:Use the debugger, (and not cout) to determine the value assigned to result when ii is 5.
+        -:  110:
+        -:  111:You can paste the code into scratch.cpp from the demo to run in VS Code.
+        -:  112:
+        -:  113:Optional challenge: if you set mys to 0 in that iteration of the loop (before result is added to mys), what is the value of result on the next iteration?
+        -:  114:*/
+        -:  115:
+        -:  116:/* ANSWER:
+        -:  117:result = 15
+        -:  118:result = 22
+        -:  119:*/
+        -:  120:
+    #####:  121:int mystery_func(int & x) {
+    #####:  122:  x = 5 + ((x * x * 2) % 41);
+    #####:  123:  return x / 2;
+        -:  124:}
+        -:  125:
+    #####:  126:void test_part2() {
+    #####:  127:  int mys = 0;
+    #####:  128:  for (int ii = 0; ii < 10; ++ ii) {
+    #####:  129:    int result = mystery_func(mys);
+    #####:  130:    mys += result;
+        -:  131:  }
+    #####:  132:}
+        -:  133:
+        -:  134:/*
+        -:  135:Use valgrind to find a memory error in the program.  Add a comment at the top of
+        -:  136:the file describing the error along with relevant output from valgrind.
+        -:  137:
+        -:  138:You can paste the code into scratch.cpp from the demo to run in VS Code.
+        -:  139:*/
+        -:  140:
+        -:  141:/* ANSWER:
+        -:  142:There's an error if the first number you input is larger than the size of the list.
+        -:  143:Invalid read of size 4
+        -:  144:==36109==    at 0x109486: test_part3() (scratch.cpp:55)
+        -:  145:==36109==    by 0x109551: main (scratch.cpp:61)
+        -:  146:==36109==  Address 0x4e1e9c8 is 24 bytes after a block of size 16 in arena "client"
+        -:  147:*/
+        -:  148:
+    #####:  149:void test_part3() {
+    #####:  150:  cout << "Enter some numbers and then eof:" << endl;
+        -:  151:
+    #####:  152:  vector< int > numbers;
+        -:  153:  int x;
+    #####:  154:  while (cin >> x) {
+    #####:  155:    numbers.push_back(x);
+        -:  156:  }
+        -:  157:  
+    #####:  158:  if (!numbers.empty()) {
+    #####:  159:    const int index = numbers.front();
+    #####:  160:    const int number = numbers[index];
+    #####:  161:    cout << "The number at index " << index << " is " << number << endl;
+        -:  162:  }
+    #####:  163:}
+        -:  164:
+        -:  165:/*
+        -:  166:Use gcov to determine how many times the lines commented LINE 1 and LINE 2 are executed (each).
+        -:  167:
+        -:  168:You can paste the code into scratch.cpp from the demo to run in VS Code.
+        -:  169:
+        -:  170:Hint: You may need to change your Makefile.
+        -:  171:*/
+        -:  172:
+        -:  173:/* ANSWER:
+        -:  174:LINE 1: 100
+        -:  175:LINE 2: 4799
+        -:  176:*/
+        -:  177:
+        -:  178:#include <iostream>
+        -:  179:using namespace std;
+        -:  180:
+    #####:  181:void test_part4() {
+    #####:  182:    int x = 0;
+    #####:  183:    int y = 0;
+    #####:  184:    for (int ii = 0; ii < 100; ++ ii) {
+    #####:  185:        x = ((x + 1) * 7) % 97; // LINE 1
+    #####:  186:        for (int jj = 0; jj < x; ++ jj) {
+    #####:  187:            y = ((y + 1) * 5) % 97; // LINE 2
+        -:  188:        }
+        -:  189:    }
+    #####:  190:    cout << x << " " << y << endl;
+    #####:  191:}
+        -:  192:
+        -:  193:/*
+        -:  194:Use callgrind to determine whether the program spends more instructions (inclusive) in mystery1 or mystery2.  Include relevant callgrind output in your answer.
+        -:  195:
+        -:  196:You can paste the code into scratch.cpp from the demo to run in VS Code.
+        -:  197:*/
+        -:  198:
+        -:  199:/* ANSWER:
+        -:  200:*/
+        -:  201:
+        -:  202:#include <iostream>
+        -:  203:using namespace std;
+        -:  204:
+        1:  205:void mystery1() {
+        1:  206:    int x = 0;
+        1:  207:    int y = 0;
+  1000001:  208:    for (int ii = 0; ii < 1000000; ++ ii) {
+  1000000:  209:        x = ((x + 1) * 7) % 97;
+ 49343476:  210:        for (int jj = 0; jj < x; ++ jj) {
+ 48343476:  211:            y = ((y + 1) * 5) % 97;
+        -:  212:        }
+        -:  213:    }
+        1:  214:    cout << x << " " << y << endl;
+        1:  215:}
+        -:  216:
+        1:  217:void mystery2() {
+        1:  218:    int x = 0;
+        1:  219:    int y = 0;
+   100001:  220:    for (int ii = 0; ii < 100000; ++ ii) {
+   100000:  221:        x = ((x + 1) * 7) % 5011;
+253522936:  222:        for (int jj = 0; jj < x; ++ jj) {
+253422936:  223:            y = ((y + 1) * 5) % 97;
+        -:  224:        }
+        -:  225:    }
+        1:  226:    cout << x << " " << y << endl;
+        1:  227:}
+        -:  228:
+        1:  229:void test_part5() {
+        1:  230:    mystery1();
+        1:  231:    mystery2();
+        1:  232:}
+        -:  233:
+        1:  234:int main() {
+        1:  235:  test_part5();
+        1:  236:}

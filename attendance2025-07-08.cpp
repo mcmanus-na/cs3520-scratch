@@ -42,15 +42,15 @@ returns. After you've finished that, write a second, overloaded function that do
 same for doubles.
 */
 void make_ordered(int &a, int &b) {
-    int max = a > b ? a : b;
-    int min = a < b ? a : b;
-    a = min;
-    b = max;
+    int sum = a + b;
+    int diff = abs(a - b);
+    a = (sum - diff) / 2;
+    b = (sum + diff) / 2;
 }
 
 void make_ordered(double &a, double &b) {
     double avg = (a+b)/2;
-    double half_diff = (a-b)/2;
+    double half_diff = abs((a-b)/2);
     a = avg - half_diff;
     b = avg + half_diff;
 }
@@ -61,6 +61,8 @@ if the vectors have the same length, or "NO!" if they don't. Your function shoul
 a separate declaration and definition. Your function should take in the vectors via const reference, 
 and have a comment explaining why the const reference is a good idea.
 */
+
+void vector_length_equals(const vector<int> &vec1, const vector<int> &vec2);
 
 // Const references here lets you pass in two vectors without copying them,
 // but ensures this function cannot edit the vectors somehow
@@ -86,4 +88,30 @@ int main() {
     vector<int> v3 = {1};
     vector_length_equals(v1,v2); //YES!
     vector_length_equals(v1,v3); //NO!
+}
+
+/*
+Use the debugger, (and not cout) to determine the value assigned to result when ii is 5.
+
+You can paste the code into scratch.cpp from the demo to run in VS Code.
+
+Optional challenge: if you set mys to 0 in that iteration of the loop (before result is added to mys), what is the value of result on the next iteration?
+*/
+
+/* ANSWER:
+result = 15
+result = 22
+*/
+
+int mystery_func(int & x) {
+  x = 5 + ((x * x * 2) % 41);
+  return x / 2;
+}
+
+void test_part2() {
+  int mys = 0;
+  for (int ii = 0; ii < 10; ++ ii) {
+    int result = mystery_func(mys);
+    mys += result;
+  }
 }
